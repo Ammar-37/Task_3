@@ -37,13 +37,22 @@ public class UserService {
     }
 
 
-    //Update Username of the User
-    public User updateUserUsername(String id, String username) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "User not found with id: " + id));
-        user.setUsername(username);
-        return userRepository.save(user);
+//    //Update Username of the User
+//    public User updateUserUsername(String id, String username) {
+//        User user = userRepository.findById(id)
+//                .orElseThrow(() -> new ResponseStatusException(
+//                        HttpStatus.NOT_FOUND, "User not found with id: " + id));
+//        user.setUsername(username);
+//        return userRepository.save(user);
+//    }
+public User updateUserUsername(String id, String username) {
+    Optional<User> optionalUser = userRepository.findById(id);
+    if (optionalUser.isEmpty()) {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with id " + id + " not found");
     }
+    User user = optionalUser.get();
+    user.setUsername(username);
+    return userRepository.save(user);
+}
 
 }
